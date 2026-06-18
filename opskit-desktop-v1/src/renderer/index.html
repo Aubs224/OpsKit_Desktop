@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpsKit Desktop</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Chat history">
+        <div class="sidebar-header">
+          <div>
+            <h2>Sessions</h2>
+            <p class="hint">Local chat history</p>
+          </div>
+          <button id="newSessionButton" class="primary-button compact">New</button>
+        </div>
+        <button id="refreshSessionsButton" class="ghost-button compact sidebar-refresh" type="button">Refresh</button>
+        <div id="sessionList" class="session-list" aria-live="polite"></div>
+      </aside>
+
+      <section class="main-panel">
+        <header class="toolbar">
+          <div>
+            <h1>OpsKit Desktop</h1>
+            <p class="subtitle">V1 local chat client · Cohere + Claude</p>
+          </div>
+          <div class="toolbar-actions">
+            <span id="providerBadge" class="badge">Provider: —</span>
+            <span id="sessionBadge" class="badge">Session: none</span>
+            <button id="toolbarNewSessionButton" class="ghost-button">New session</button>
+            <button id="settingsButton" class="ghost-button">Settings</button>
+          </div>
+        </header>
+
+        <section id="statusStrip" class="status-strip"></section>
+
+        <section id="chatLog" class="chat-log" aria-live="polite"></section>
+
+        <section class="composer-card">
+          <div id="dropZone" class="drop-zone" tabindex="0">
+            Drop PDF, DOCX, or TXT files here, or use Attach files.
+          </div>
+          <div id="attachmentList" class="attachment-list"></div>
+          <textarea id="messageInput" rows="4" placeholder="Type your message…"></textarea>
+          <div class="composer-actions">
+            <button id="attachButton" class="ghost-button">Attach files</button>
+            <button id="sendButton" class="primary-button">Send</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="sessionDialog" class="modal">
+      <form method="dialog" id="sessionForm" class="modal-card">
+        <h2>Name this session</h2>
+        <p>Short descriptive slugs work best. Spaces are converted to kebab-case.</p>
+        <input id="sessionNameInput" type="text" required placeholder="cohere-desktop-app" autocomplete="off" />
+        <div id="sessionSlugPreview" class="hint">slug: —</div>
+        <menu>
+          <button type="button" id="cancelSessionButton" value="cancel" class="ghost-button">Cancel</button>
+          <button id="startSessionButton" value="default" class="primary-button">Start session</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <dialog id="settingsDialog" class="modal wide">
+      <form method="dialog" id="settingsForm" class="modal-card settings-grid">
+        <header class="settings-header">
+          <div>
+            <h2>Settings</h2>
+            <p>API keys are write-only and stored outside electron-store.</p>
+          </div>
+          <button id="closeSettingsButton" value="cancel" class="ghost-button">Close</button>
+        </header>
+
+        <label>
+          Provider
+          <select id="activeProviderInput">
+            <option value="cohere">Cohere</option>
+            <option value="claude">Claude</option>
+          </select>
+        </label>
+
+        <label>
+          Cohere model
+          <input id="cohereModelInput" type="text" />
+        </label>
+
+        <label>
+          Claude model
+          <input id="claudeModelInput" type="text" />
+        </label>
+
+        <label>
+          Max output tokens
+          <input id="maxTokensInput" type="number" min="256" max="128000" step="1" />
+        </label>
+
+        <label>
+          Temperature
+          <input id="temperatureInput" type="number" min="0" max="2" step="0.1" />
+        </label>
+
+        <label>
+          Memory file limit
+          <input id="memoryFileLimitInput" type="number" min="0" max="50" step="1" />
+        </label>
+
+        <label class="path-row">
+          OpsKit memory directory
+          <span>
+            <input id="memoryDirInput" type="text" />
+            <button type="button" id="browseMemoryButton" class="ghost-button">Browse</button>
+          </span>
+        </label>
+
+        <label class="path-row">
+          Quick Setup file path
+          <span>
+            <input id="quickSetupPathInput" type="text" />
+            <button type="button" id="browseQuickSetupButton" class="ghost-button">Browse</button>
+          </span>
+        </label>
+
+        <label>
+          Cohere API key
+          <input id="cohereKeyInput" type="password" placeholder="Paste new key to replace existing key" autocomplete="off" />
+        </label>
+
+        <label>
+          Claude API key
+          <input id="claudeKeyInput" type="password" placeholder="Paste new key to replace existing key" autocomplete="off" />
+        </label>
+
+        <div id="keyStatus" class="key-status"></div>
+
+        <div class="settings-actions">
+          <button type="button" id="saveSettingsButton" class="primary-button">Save settings</button>
+          <button type="button" id="runCohereTestButton" class="ghost-button">Run Cohere RISK-01 boot test</button>
+          <button type="button" id="openMemoryButton" class="ghost-button">Open memory folder</button>
+        </div>
+
+        <pre id="validationOutput" class="validation-output"></pre>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
