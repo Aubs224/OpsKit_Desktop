@@ -1,7 +1,6 @@
 # OpsKit Desktop V1.1
 
-<img width="1815" height="979" alt="image" src="https://github.com/user-attachments/assets/3ce51e6d-648a-44fc-bf36-9532d2dd2c5b" />
-
+<img width="1919" height="1027" alt="image" src="https://github.com/user-attachments/assets/e3996251-393e-415b-a891-0c5901d47b5d" />
 
 A Windows-first Electron + Node desktop chat client for OpsKit-managed AI sessions. V1 supports Cohere Command A and Anthropic Claude behind a provider adapter interface, with local file extraction, flat-file OpsKit memory, keychain-backed API key storage, and a local chat-history sidebar.
 
